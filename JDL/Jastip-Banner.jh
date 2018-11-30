@@ -1,0 +1,31 @@
+entity Banner {
+	bannerTitle String,
+	bannerType BannerType, 
+    postingType PostingType,
+    image ImageBlob,
+    imageUrl String,
+    startDate Instant,
+    endDate Instant,
+    description String, 
+    notes String,
+    query String
+}
+
+entity BannerAuditConfig{
+	entityName String required, 
+    activeStatus Boolean
+}
+
+entity BannerAudit{
+	entityName String required, 
+    entityId Long
+}
+
+enum BannerType{
+	INTERNAL, EXTERNAL
+}
+
+enum PostingType{
+	TRAVELLER, REQUESTOR
+}
+paginate Banner, BannerAuditConfig, BannerAudit with infinite-scroll

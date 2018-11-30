@@ -1,0 +1,76 @@
+entity Wallet{
+	ownerId Long required, 
+    balance Double,
+    status WalletStatus
+}
+
+entity WalletTransaction{
+	transactionDateTime Instant,
+    transactionType WalletTransactionType,
+    nominal Double, 
+    postingId Long, 
+    offeringId Long, 
+    withdrawalId Long
+}
+
+entity WalletWithdrawal{
+	ownerId Long required, 
+    requestDateTime Instant,
+    nominal Double, 
+    destBankName String,
+    destBankAccount String,
+    status WithdrawalStatus,
+    completedDateTime Instant
+}
+
+entity WithdrawalTransferList{
+	withdrawalId Long, 
+    nominal Double,
+    destBankName String,
+    destBankAccount String,
+}
+
+entity WithdrawalTransferHistory{
+	withdrawalId Long, 
+    nominal Double,
+    destBankName String,
+    destBankAccount String
+}
+
+entity WithdrawalTransferFailed{
+	withdrawalId Long, 
+    nominal Double,
+    destBankName String,
+    destBankAccount String
+}
+
+enum WalletStatus{
+	ACTIVE, INACTIVE
+}
+
+enum WalletTransactionType{
+	WITHDRAWAL, INCOME, PAYMENT
+}
+
+enum WithdrawalStatus{
+	IN_PROCESS, SUCCESS, FAIL
+}
+
+entity WalletAuditConfig{
+	entityName String required, 
+    activeStatus Boolean
+}
+
+entity WalletAudit{
+	entityName String required, 
+    entityId Long
+}
+
+relationship OneToMany{
+	Wallet{walletTransaction} to WalletTransaction
+}
+
+paginate  Wallet, WalletTransaction, 
+WalletWithdrawal, WithdrawalTransferList, 
+WithdrawalTransferHistory, WithdrawalTransferFailed, 
+WalletAuditConfig, WalletAudit with infinite-scroll
